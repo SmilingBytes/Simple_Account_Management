@@ -1,0 +1,13 @@
+.pd{padding:25px 0px 0px 0px;}
+.mg5{margin-top:5px}
+.footer { background: ghostwhite; margin-top: -24px;}
+body{background-image:url("img/bg.jpg")}
+.header{background:#eee; margin-bottom:5px;}
+.img{max-height:120px; cursor: pointer;}
+.bgw{background:#fff;}
+.pos5{position:relative; top:10px;}
+.login, .changepass {min-height: 491px;padding-top: 141px;margin-bottom: 30px;}
+.changepass{display:none;}
+.imgZen{ margin-left: -13px;}
+#iname { font-size: 24px; font-weight: 600; text-transform: capitalize; padding: 5px; }
+.statBtn{margin-right:15px;}

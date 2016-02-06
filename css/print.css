@@ -1,0 +1,7 @@
+.footer { background: ghostwhite; margin-top: -24px;}
+body{background:#fff;}
+.header{background:#eee; display:block}
+.login, .bgw, .noPrint, .img, .changepass {display:none;}
+.topNav{padding: 10px 0px; position: relative; top: 5px;}
+#iname{font-size: 24px; padding-left: 30px; font-weight: 600; text-transform: capitalize;}
+.statBtn{margin-right:15px;}
