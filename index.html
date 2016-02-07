@@ -13,6 +13,8 @@
 	<link href="css/jquery.dataTables.min.css" rel="stylesheet" media="screen"/>
 	<link href="css/bootstrap-select.css" rel="stylesheet" media="screen"/>
 	<link href="css/print.css" rel="stylesheet" media="print"/>
+	<link rel="stylesheet" href="css/alertify.core.css" />
+	<link rel="stylesheet" href="css/alertify.default.css" id="toggleCSS" />
 
 	<script src="js/jquery.min.js"  type="text/javascript" charset="utf-8"></script>	
 	<script src="js/jquery.tabletoCSV.js" type="text/javascript" charset="utf-8"></script>
@@ -261,6 +263,15 @@
 					
 		//login check for admin access 
 		function checkLog(){
+		 
+		    if(sessionStorage.alertID){
+				if(sessionStorage.alertID == 'Successfull logout'){
+					reset();
+					alertify.success("Log Out Succesfull");
+					window.sessionStorage.clear();
+				}
+			}
+		    
 			if (sessionStorage.sid && sessionStorage.spass) {
 				if(sessionStorage.sid == localStorage.id && sessionStorage.spass == localStorage.pass){
 					$(".admin").css( "display", "block" );
@@ -448,10 +459,9 @@
 		}
 		
 		function logOut(){
-			window.sessionStorage.clear();
-			document.getElementById("alertMe").innerHTML = '<div class="alert alert-success alert-dismissable alert-message fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4> Logged Out</h4>Log Out Succesfull.</div> ';
-			autoClosingAlert(".alert-message", 1000);
-			window.setTimeout(function() { window.location.reload();}, 1000);
+		    window.sessionStorage.clear();
+			sessionStorage.alertID = 'Successfull logout';
+			window.setTimeout(function() { window.location.reload();}, 1);
 		}
 	</script>
 	
@@ -464,6 +474,29 @@
 		$(document).ready(function() {
 			$('#zenTable').dataTable();
 		} );
+	</script>
+	
+	<script src="js/alertify.min.js"></script>
+	<script>
+		function reset () {
+			$("#toggleCSS").attr("href", "css/alertify.default.css");
+			alertify.set({
+				labels : {
+					ok     : "OK",
+					cancel : "Cancel"
+				},
+				delay : 5000,
+				buttonReverse : false,
+				buttonFocus   : "ok"
+			});
+		}
+
+		$("#success").on( 'click', function () {
+			reset();
+			alertify.success("Success log message");
+			return false;
+		});
+
 	</script>
 </body>
 </html>
