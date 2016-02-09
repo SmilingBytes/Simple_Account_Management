@@ -41,7 +41,7 @@
 	<div class="container">
 		<div class="row header">
 			<div class="col-md-3">
-				<img class="img imgZen img-responsive" onclick="changePassView();" alt="Admin Profile Picture" src="img/Ismail_H_Rana.jpg" />
+				<img class="img imgZen img-responsive" alt="Admin Profile Picture" src="img/Ismail_H_Rana.jpg" />
 			</div>
 			<div class="col-md-6">
 				<div class="page-header">
@@ -49,7 +49,7 @@
 				</div>
 			</div>
 			<div class="col-md-3">
-				<img class="img img-responsive pull-right" onclick="logOut();" alt="BPrinter" src="img/printer.png" />
+				<img class="img img-responsive pull-right" alt="BPrinter" src="img/printer.png" />
 			</div>
 			<div class="col-md-8">
 				<span class="text-primary pull-left name" id="iname">M Rana</span>
@@ -240,10 +240,19 @@
 	</div>
 	<div class="container-fluid">
 		<div class="row footer">
-			<div class="col-md-4">
-				<span class="pull-left"><button class="btn btn-libk btn-danger" onclick="resetAll();">Reset All</button></span>
+			<div class="col-md-3 col-offset-2">
+				<span class="pull-right">
+					<script>
+						if (sessionStorage.sid && sessionStorage.spass) {
+							if(sessionStorage.sid == localStorage.id && sessionStorage.spass == localStorage.pass){
+								var adminOption = '<button class="btn btn-link" onclick="logOut();">Sign Out</button> <button class="btn btn-link" onclick="changePassView();">Change Password</button>';
+								document.write(adminOption);
+							}
+						}
+					</script>
+				</span>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-4">
 				 <span class="pull-right">Coded by<a href="https://github.com/beyMax" class="btn btn-link " type="button"> Ismail H Rana</a></span>
 			</div>
 		</div>
@@ -411,8 +420,6 @@
 		}
 		
 		function changePassView(){
-			if(!checkLog()) 
-				return false;
 			$(".admin").css( "display", "none" );
 			$(".login").css( "display", "none" );
 			$(".changepass").css( "display", "block" );
@@ -453,12 +460,6 @@
 		function logOut(){
 		    window.sessionStorage.clear();
 			sessionStorage.success = 'Successfull logout';
-			window.location.reload();
-		}
-		
-		function resetAll(){
-			window.sessionStorage.clear();
-			window.localStorage.clear();
 			window.location.reload();
 		}
 	</script>
