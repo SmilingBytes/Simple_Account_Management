@@ -2,7 +2,7 @@
 Simple Account Management System using HTML5 and jQuery. Used localStorage to store account information and sessionStorage for admin access.
 <h2>Features</h2>
 <ol>
-	<li>Live search & Select <li>
+	<li>Live search & Select </li>
 	<li>Smart Notification </li>
 	<li>Form Validation</li>
 	<li>Export data table as CSV</li>
