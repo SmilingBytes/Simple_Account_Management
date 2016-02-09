@@ -9,3 +9,5 @@ Simple Account Management System using HTML5 and jQuery. Used localStorage to st
 <center><img src="https://github.com/beyMax/Simple_Account_Management/blob/master/Screenshot/notification.png"/></center>
 <h4>Form Validation:</h4>
 <center><img src="https://github.com/beyMax/Simple_Account_Management/blob/master/Screenshot/form_validation.png"/></center>
+<h4>Export data table as CSV (Excel sheet):</h4>
+<center><img src="https://github.com/beyMax/Simple_Account_Management/blob/master/Screenshot/export.png"/></center>
