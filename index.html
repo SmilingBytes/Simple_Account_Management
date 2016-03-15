@@ -35,6 +35,10 @@
             });
         });
     </script>
+	<style>
+	.cbtn, .ibtn{outline:none; border:none; background:transparent; color:#337AB7;}
+	.ibtn{color:#444;}
+	</style>
 	
 </head>
 <body onload="bodyLoad();">
@@ -172,9 +176,10 @@
 								<script>
 									customers = JSON.parse(localStorage["customers"]);
 									info = JSON.parse(localStorage["info"]);
+									tk = JSON.parse(localStorage["bdt"]);
 									var results = " ";
 									for(i=0;i<customers.length; i++){
-										results = results+ '<option data-subtext="'+info[i]+'" value="'+customers[i]+'">'+customers[i]+'</option>';
+										results = results+ '<option data-subtext="'+info[i]+' [ $'+tk[i]+']" value="'+customers[i]+'">'+customers[i]+'</option>';
 									}
 									document.write(results);
 								</script>
@@ -204,11 +209,11 @@
 				<table id="dataTable" class="table table-hover table-condensed table-bordered table-striped">
 					<thead>
 						<tr class="danger">
-							<th class="col-md-1">SL No</th>
+							<th class="col-md-1">No</th>
 							<th class="col-md-3">Name</th>
 							<th class="col-md-3">Info</th>
 							<th class="col-md-1">Taka</th>
-							<th class="col-md-5">Status</th>
+							<th class="col-md-5">Last Update</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -216,12 +221,15 @@
 							tk = JSON.parse(localStorage["bdt"]);
 							customers = JSON.parse(localStorage["customers"]);
 							info = JSON.parse(localStorage["info"]);
+							if(localStorage["dTime"]){
+								dTime = JSON.parse(localStorage["dTime"]);
+							}
 							var results = " ";
 							var sl = 1;
 							for(i=0;i<customers.length; i++){
 								if( Number(tk[i]) == 0 )
 									continue;
-								results = results+ '<tr><td>'+sl +'</td><td>'+customers[i] +'</td><td>'+info[i] +'</td><td>'+tk[i]+'</td><td> </td></tr>';
+								results = results+ '<tr><td>'+sl +'</td><td><button class="cbtn" onclick="sessionStorage.eid = '+i+'">'+customers[i] +'</button></td><td><button class="ibtn" onclick="sessionStorage.eid = '+i+'">'+info[i] +'</button></td><td>'+tk[i]+'</td><td>'+dTime[i]+'</td></tr>';
 								sl++;
 							}
 							document.write(results);
@@ -263,12 +271,30 @@
 		var tk = [];
 		var info = [];
 		var customers = [];
+		var dTime = [];
 		var totalBDT = 0;
+		
+		var dt = new Date();
+		var mo = dt.getMonth();
+		var da = dt.getDate();
+		var ye = dt.getFullYear();
+		var min = dt.getMinutes();
+		var hou = dt.getHours();
+		var sep = '-';
+		mo += 1;
+		mo = mo.toString();
+		da = da.toString();
+		ye = ye.toString();
+		min = min.toString();
+		hou = hou.toString();
+		var dateTime =  da.concat(sep,mo,sep,ye,' * ',hou,':',min);
+		dateTime = dateTime.toString();
 		
 		function bodyLoad(){
 			checkLog();
 			checkAlert();
 		}
+		
 		//login check for admin access 
 		function checkLog(){
 			if (sessionStorage.sid && sessionStorage.spass) {
@@ -280,7 +306,7 @@
 					for(i=0; i<customers.length; i++)
 						totalBDT = totalBDT + Number(tk[i]);						
 					$(".amount").html(totalBDT+"  TK");
-					$("iname").innerHTML = " "+localStorage.id+" ";
+					$("#iname").innerHTML = " "+localStorage.id+" ";
 					$("#iname").html(localStorage.id);
 					$(".totalCustomers").html(customers.length);
 					return false;
@@ -354,6 +380,9 @@
 					customers = JSON.parse(localStorage["customers"]);
 					tk = JSON.parse(localStorage["bdt"]);
 					info = JSON.parse(localStorage["info"]);
+					if(localStorage["dTime"]){
+						dTime = JSON.parse(localStorage["dTime"]);
+					}
 					index = customers.indexOf(nName);
 					var money = tk[index];
 					i = customers.length;
@@ -361,10 +390,12 @@
 						customers[i] = nName;
 						tk[i] = taka;
 						info[i] = information;
+						dTime[i] = dateTime;
 						
 						localStorage["customers"] = JSON.stringify(customers);
 						localStorage["bdt"] = JSON.stringify(tk);
 						localStorage["info"] = JSON.stringify(info);
+						localStorage["dTime"] = JSON.stringify(dTime);
 						
 						sessionStorage.success = nName+' added successfully with taka <b class="txt-large badge">'+taka+'</b>';
 						window.location.reload();
@@ -375,13 +406,17 @@
 						return false;
 					}
 				}else{
-					//new user
+					//First user
 					customers[0] = nName;
 					tk[0] = taka;
 					info[0] = information;
+					dTime[0] = dateTime;
 					localStorage["customers"] = JSON.stringify(customers);
 					localStorage["bdt"] = JSON.stringify(tk);
 					localStorage["info"] = JSON.stringify(info);
+					localStorage["dTime"] = JSON.stringify(dTime);
+					sessionStorage.success = nName+' added successfully with taka <b class="txt-large badge">'+taka+'</b>';
+					window.location.reload();
 				}
 			}else{
 				sessionStorage.error = '<h4> Name ERROR!!!</h4>Rules:<br />    1. All characters allowed<br />    2. Minimum 3 letters</div> ';
@@ -399,15 +434,18 @@
 			
 			customers = JSON.parse(localStorage["customers"]);
 			tk = JSON.parse(localStorage["bdt"]);
-			
+			if(localStorage["dTime"])
+				dTime = JSON.parse(localStorage["dTime"]);
 			mName = cName.toUpperCase();
 			var n = customers.indexOf(mName);
 			var money = tk[n];
 			if(n>=0){
 				
 				tk[n] = Number(money) + Number(taka);
+				dTime[n] = dateTime;
+				
 				localStorage["bdt"] = JSON.stringify(tk);
-				tk = JSON.parse(localStorage["bdt"]);
+				localStorage["dTime"] = JSON.stringify(dTime);
 				
 				sessionStorage.success = '<br />New amount for <b>'+cName+' </b> is BDT <b class="txt-large badge">'+tk[n] +'</b> ';
 				window.location.reload();
@@ -437,7 +475,7 @@
 				if(idLangth>2 && passLangth>3){
 					localStorage.id = nid;
 					localStorage.pass = npass;
-					sessionStorage.success = "You've successfully changed your password.";
+					sessionStorage.success = '<b>Password Changed </b>successfully';
 					window.location.reload();
 					return false;
 				}else{
@@ -488,6 +526,56 @@
 				buttonReverse : false,
 				buttonFocus   : "ok"
 			});
+		}
+		// Customer Name Edit function
+		$(".cbtn").on( 'click', function () {
+			customers = JSON.parse(localStorage["customers"]);
+			var i = sessionStorage.eid;
+			reset();
+			alertify.prompt("Edit Customer Name", function (e, str) {
+				if (e) {
+					var n = 0;
+					var patt = /\S/g;
+					var ch = str.match(patt);
+					n = ch.length;
+					if(n>2){
+						customers[i] = str.toUpperCase();
+						localStorage["customers"] = JSON.stringify(customers);
+						sessionStorage.success = 'Update Successfull';
+						window.location.reload();
+					} else {
+						sessionStorage.error = '<h4> Name ERROR!!!</h4>Rules:<br />    1. All characters allowed<br />    2. Minimum 3 letters</div> ';
+						window.location.reload();
+					}
+				} else {
+					alertify.error("Update Cancelled out.");
+				}
+			}, customers[i]);
+			return false;
+		});
+		
+		// Customer Information Update function
+		$(".ibtn").on( 'click', function () {
+			info = JSON.parse(localStorage["info"]);
+			var i = sessionStorage.eid;
+			reset();
+			alertify.prompt("Edit Customer Information", function (e, str) {
+				if (e) {
+					info[i] = str;
+					localStorage["info"] = JSON.stringify(info);
+					sessionStorage.success = 'Update Successfull';
+					window.location.reload();
+				} else {
+					alertify.error("Update Cancelled out.");
+				}
+			}, info[i]);
+			return false;
+		});
+	</script>
+	<script type="text/javascript">
+		function changeView(hideID, displayID ){
+			document.getElementById(hideID).style.display = "none";
+			document.getElementById(displayID).style.display = "block";
 		}
 	</script>
 </body>
